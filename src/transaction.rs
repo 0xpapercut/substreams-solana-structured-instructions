@@ -69,3 +69,8 @@ fn get_wrapped_instructions(confirmed_transaction: &pb::ConfirmedTransaction) ->
     }
     wrapped_instructions
 }   
+
+pub fn structured_instructions(transaction: &pb::ConfirmedTransaction) -> Vec<Instruction> {
+    let wrapped_instructions = get_wrapped_instructions(transaction);
+    structure_wrapped_instructions_with_logs(&wrapped_instructions, &Vec::new())
+}
