@@ -17,4 +17,4 @@ struct StructuredInstruction {
 }
 ```
 
-The important part here is that you can quickly query the programs that were directly invoked by another without jumping through hoops. See an example with [raydium-substream](https://github.com/0xpapercut/raydium-substream).
+so that you can quickly query the programs that were directly invoked by another without jumping through hoops. See an example with [raydium-substream](https://github.com/0xpapercut/raydium-substream).
