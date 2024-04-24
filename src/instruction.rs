@@ -27,7 +27,7 @@ impl WrappedInstruction<'_> {
     }
     pub fn stack_height(&self) -> Option<u32> {
         match self {
-            Self::Compiled(instr) => Some(1),
+            Self::Compiled(_) => Some(1),
             Self::Inner(instr) => instr.stack_height,
         }
     }
@@ -90,7 +90,6 @@ pub(crate) fn structure_wrapped_instructions_with_logs<'a>(instructions: &'a [Wr
     }
     let inner_instructions = structure_wrapped_instructions_with_logs(&instructions[i + 1..], logs);
     structured_instructions.push(Instruction::new(&instructions[i], inner_instructions));
-    // structured_instructions.extend(structure_wrapped_instructions_with_logs(&instructions[i..], logs));
 
     structured_instructions
 }
