@@ -5,7 +5,7 @@ No more pain when parsing instructions. Simply
 ```rust
 use substreams_solana_structured_instructions::get_structured_instructions
 
-let structured_instructions = get_structured_instructions(confirmed_)
+let structured_instructions = get_structured_instructions(confirmed_transaction)
 ```
 
 et voilà! `structured_instructions` here is represented by a `Vec<StructuredInstruction>` where
