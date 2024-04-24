@@ -46,7 +46,7 @@ impl<'a> From<&'a pb::InnerInstruction> for WrappedInstruction<'a> {
 }
 
 #[derive(Debug)]
-pub struct Instruction {
+pub struct StructuredInstruction {
     pub program_id_index: u32,
     pub accounts: Vec<u8>,
     pub data: Vec<u8>,
@@ -55,8 +55,8 @@ pub struct Instruction {
     pub logs: Vec<String>,
 }
 
-impl Instruction {
-    fn new(instruction: &WrappedInstruction, inner_instructions: Vec<Instruction>) -> Self {
+impl StructuredInstruction {
+    fn new(instruction: &WrappedInstruction, inner_instructions: Vec<StructuredInstruction>) -> Self {
         Self {
             program_id_index: instruction.program_id_index(),
             accounts: instruction.accounts().clone(),
@@ -68,8 +68,8 @@ impl Instruction {
     }
 }
 
-pub(crate) fn structure_wrapped_instructions_with_logs<'a>(instructions: &'a [WrappedInstruction], logs: &[String]) -> Vec<Instruction> {
-    let mut structured_instructions: Vec<Instruction> = Vec::new();
+pub(crate) fn structure_wrapped_instructions_with_logs<'a>(instructions: &'a [WrappedInstruction], logs: &[String]) -> Vec<StructuredInstruction> {
+    let mut structured_instructions: Vec<StructuredInstruction> = Vec::new();
     
     if instructions.len() == 0 {
         return Vec::new();
@@ -77,19 +77,18 @@ pub(crate) fn structure_wrapped_instructions_with_logs<'a>(instructions: &'a [Wr
 
     let stack_height = instructions[0].stack_height();
     let mut i = 0;
-    for (j, instr) in instructions.iter().skip(1).enumerate() {
-        if instr.stack_height() == stack_height && i != j {
-            if j > i + 1 {
-                let inner_instructions = structure_wrapped_instructions_with_logs(&instructions[i + 1..j - 1], logs);
-                structured_instructions.push(Instruction::new(instr, inner_instructions))
-            } else {
-                structured_instructions.push(Instruction::new(instr, Vec::new()))
-            }
+    for (j, instr) in instructions.iter().enumerate() {
+        if j == i {
+            continue;
+        }
+        if instr.stack_height() == stack_height {
+            let inner_instructions = structure_wrapped_instructions_with_logs(&instructions[i + 1..j], logs);
+            structured_instructions.push(StructuredInstruction::new(&instructions[i], inner_instructions));
             i = j;
         }
     }
     let inner_instructions = structure_wrapped_instructions_with_logs(&instructions[i + 1..], logs);
-    structured_instructions.push(Instruction::new(&instructions[i], inner_instructions));
+    structured_instructions.push(StructuredInstruction::new(&instructions[i], inner_instructions));
 
     structured_instructions
 }
