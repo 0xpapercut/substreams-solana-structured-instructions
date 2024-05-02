@@ -3,6 +3,9 @@ name = "substreams-solana-structured-instructions"
 version = "0.1.0"
 edition = "2021"
 
+[lib]
+name = "structured_instructions"
+
 [dependencies]
 substreams = "^0.5.0"
 substreams-solana = { git = "https://github.com/streamingfast/substreams-solana", branch = "master" }
