@@ -4,7 +4,7 @@ version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "structured_instructions"
+name = "substreams_solana_structured_instructions"
 
 [dependencies]
 substreams = "^0.5.0"
